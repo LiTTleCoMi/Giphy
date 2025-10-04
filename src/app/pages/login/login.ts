@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { map, Subscription, take, tap } from 'rxjs';
 
@@ -11,19 +11,21 @@ import { map, Subscription, take, tap } from 'rxjs';
 })
 export class Login implements OnDestroy {
   private auth = inject(AuthService);
-	private router = inject(Router);
-	private loggedInSubscription = new Subscription();
+  private router = inject(Router);
+  private loggedInSubscription = new Subscription();
 
   constructor() {
     // check if logged in
-    this.loggedInSubscription = this.auth.isLoggedIn$.pipe(
-      take(1),
-      tap((isLoggedIn) => {
-        if (isLoggedIn) {
-          this.router.navigate(['/chats']);
-        }
-      })
-    ).subscribe();
+    this.loggedInSubscription = this.auth.isLoggedIn$
+      .pipe(
+        take(1),
+        tap((isLoggedIn) => {
+          if (isLoggedIn) {
+            this.router.navigate(['/chats']);
+          }
+        })
+      )
+      .subscribe();
   }
 
   async login() {
@@ -34,8 +36,8 @@ export class Login implements OnDestroy {
       console.error(`Login failed: ${error}`);
     }
   }
-	
-	ngOnDestroy(): void {
-		this.loggedInSubscription.unsubscribe();
-	}
+
+  ngOnDestroy(): void {
+    this.loggedInSubscription.unsubscribe();
+  }
 }

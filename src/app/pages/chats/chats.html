@@ -1,4 +1,13 @@
-<p>chats works!</p>
 <div>
-	<button (click)="logout()">Logout</button>
+  <ul>
+    @for (conversation of conversations$ | async; track conversation.id) {
+    <li>{{ conversation.title }}</li>
+    } @empty {
+    <p>No conversations yet.</p>
+    }
+  </ul>
+</div>
+
+<div>
+  <button (click)="logout()">Logout</button>
 </div>

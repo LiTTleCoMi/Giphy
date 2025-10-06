@@ -10,12 +10,12 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
-export class Conversation {
+export class Chat {
   private firestoreService = inject(FirestoreService);
   private route = inject(ActivatedRoute);
-	conversation$ = this.route.paramMap.pipe(
-		map((params) => params.get('id')),
-		filter((id): id is string => id !== null && id !== undefined),
-		switchMap((id) => this.firestoreService.getConversationById(id))
-	);
+  conversation$ = this.route.paramMap.pipe(
+    map((params) => params.get('id')),
+    filter((id): id is string => id !== null && id !== undefined),
+    switchMap((id) => this.firestoreService.getConversationById(id))
+  );
 }

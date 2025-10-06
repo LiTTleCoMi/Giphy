@@ -5,6 +5,7 @@ import {
   doc,
   docData,
   Firestore,
+  orderBy,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -26,5 +27,10 @@ export class FirestoreService {
   getConversationById(id: string): Observable<Conversation> {
     const conversationRef = doc(this.firestore, 'conversations/' + id);
     return docData(conversationRef, { idField: 'id' }) as Observable<Conversation>;
+  }
+  getMessagesByConversationId(id: string): Observable<Message[]> {
+    const messagesRef = collection(this.firestore, 'conversations', id, 'messages');
+    const q = query(messagesRef, orderBy('timestamp', 'asc'));
+    return collectionData(q, { idField: 'id' }) as Observable<Message[]>;
   }
 }

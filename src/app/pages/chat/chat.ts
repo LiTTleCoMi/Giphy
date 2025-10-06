@@ -7,8 +7,8 @@ import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-conversation',
   imports: [AsyncPipe],
-  templateUrl: './conversation.html',
-  styleUrl: './conversation.scss',
+  templateUrl: './chat.html',
+  styleUrl: './chat.scss',
 })
 export class Conversation {
   private firestoreService = inject(FirestoreService);

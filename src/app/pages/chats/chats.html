@@ -1,7 +1,9 @@
 <div>
   <ul>
     @for (conversation of conversations$ | async; track conversation.id) {
-    <li>{{ conversation.title }}</li>
+    <li>
+      <a [routerLink]="['/chats', conversation.id]">{{ conversation.title }}</a>
+    </li>
     } @empty {
     <p>No conversations yet.</p>
     }

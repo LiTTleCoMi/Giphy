@@ -1,5 +1,18 @@
 @if (conversation$ | async; as conversation) {
 <h1>{{ conversation.title }}</h1>
-} @if (messages$ | async; as messages) { @for (message of messages; track $index) {
-<p>{{ message.body }}</p>
-} }
+}
+<div class="chat-container">
+  @for (message of chatData$ | async; track message.id) {
+  <div class="message">
+    <strong>{{ message.senderName }}:</strong>
+    <p>{{ message.body }}</p>
+  </div>
+  } @empty {
+  <p>This conversation is empty. Send the first message!</p>
+  }
+</div>
+
+<form [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
+  <input formControlName="body" placeholder="Enter a word..." autocomplete="off">
+  <button type="submit" [disabled]="!messageForm.valid">Send</button>
+</form>

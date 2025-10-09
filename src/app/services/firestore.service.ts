@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
+	addDoc,
   collection,
   collectionData,
   doc,
@@ -7,6 +8,7 @@ import {
   Firestore,
   orderBy,
   query,
+  serverTimestamp,
   where,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -32,5 +34,22 @@ export class FirestoreService {
     const messagesRef = collection(this.firestore, 'conversations', id, 'messages');
     const q = query(messagesRef, orderBy('timestamp', 'asc'));
     return collectionData(q, { idField: 'id' }) as Observable<Message[]>;
+  }
+  getUserProfiles(userIds: Array<string>) {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('uid', 'in', userIds));
+    return collectionData(q, { idField: 'id' });
+  }
+
+  addMessageToConversation(conversationId: string, messageData: any) {
+    const messagesRef = collection(this.firestore, 'conversations', conversationId, 'messages');
+
+    // Add the server timestamp to the message data
+    const dataWithTimestamp: Message = {
+      ...messageData,
+      timestamp: serverTimestamp(),
+    };
+
+    return addDoc(messagesRef, dataWithTimestamp);
   }
 }

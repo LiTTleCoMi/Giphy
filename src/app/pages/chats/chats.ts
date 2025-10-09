@@ -19,6 +19,7 @@ export class Chats {
   conversations$ = this.auth.user$.pipe(
     switchMap((user) => {
       if (user) {
+				console.log(user);
         return this.firestoreService.getConversationsForUser(user.uid);
       } else {
         return of([]);

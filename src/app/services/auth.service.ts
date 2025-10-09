@@ -1,27 +1,40 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, authState, GoogleAuthProvider, signInWithPopup, signOut } from '@angular/fire/auth';
+import { Auth, User, authState, GoogleAuthProvider, signInWithPopup, signOut } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { UserProfile } from '../interfaces/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private auth: Auth = inject(Auth);
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
 
-  // An observable stream of the current user's authentication state
   readonly user$ = authState(this.auth);
-
-  // An observable stream that maps the user state to true (logged in) or false (logged out)
   readonly isLoggedIn$ = this.user$.pipe(map((user) => !!user));
 
-  // Triggers the Google login pop-up
-  googleLogin() {
-    return signInWithPopup(this.auth, new GoogleAuthProvider());
+  async googleLogin() {
+		const userCredential = await signInWithPopup(this.auth, new GoogleAuthProvider());
+		await this.updateUserData(userCredential.user);
+		return userCredential;
   }
 
-  // Logs the current user out
   logout() {
     return signOut(this.auth);
+  }
+
+  private updateUserData(user: User) {
+    // Get a reference to the user's document in the 'users' collection
+    const userDocRef = doc(this.firestore, 'users', user.uid);
+
+    // Create the data object we want to save
+    const data: UserProfile = {
+      uid: user.uid,
+      displayName: user.displayName,
+    };
+
+    // Use setDoc to create or update the document
+    return setDoc(userDocRef, data, { merge: true });
   }
 }

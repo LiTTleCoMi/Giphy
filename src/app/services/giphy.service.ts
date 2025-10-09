@@ -10,7 +10,7 @@ export class GiphyService {
   private apiKey = environment.giphyApiKey;
 
   getRandomGif() {
-    const url = `https://api.giphy.com/v1/gifs/random?api_key=${this.apiKey}`;
+    const url = `https://api.giphy.com/v1/gifs/random?api_key=${this.apiKey}&rating=g`;
     return this.http.get(url);
   }
   getGifById(id: string) {

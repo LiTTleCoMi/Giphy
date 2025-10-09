@@ -5,10 +5,13 @@ import { FirestoreService } from '../../services/firestore.service';
 import { AsyncPipe } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { GiphyService } from '../../services/giphy.service';
+import { GiphyDisplay } from '../../components/giphy-display/giphy-display';
+import { Message } from '../../interfaces/message.model';
 
 @Component({
   selector: 'app-conversation',
-  imports: [AsyncPipe, ReactiveFormsModule],
+  imports: [AsyncPipe, ReactiveFormsModule, GiphyDisplay],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
@@ -16,6 +19,10 @@ export class Chat {
   private firestoreService = inject(FirestoreService);
   private route = inject(ActivatedRoute);
   private auth = inject(AuthService);
+  private giphyService = inject(GiphyService);
+
+  attachedGiphyUrl: string | null = null;
+  attachedGiphyId: string | null = null;
 
   conversation$ = this.route.paramMap.pipe(
     map((params) => params.get('id')),
@@ -45,6 +52,16 @@ export class Chat {
       }));
     })
   );
+  currentUserId$ = this.auth.user$.pipe(
+    map((user) => {
+      return user?.uid;
+    })
+  );
+  vm$ = combineLatest({
+    conversation: this.conversation$,
+    chatData: this.chatData$,
+    currentUserId: this.currentUserId$,
+  });
 
   messageForm = new FormGroup({
     body: new FormControl('', [Validators.required]),
@@ -56,11 +73,8 @@ export class Chat {
     }
 
     const message = this.messageForm.value.body!;
-    console.log('User wants to send:', message);
 
-    // Get the current conversation ID from the route snapshot
     const conversationId = this.route.snapshot.paramMap.get('id');
-    // Get the current user's ID from the user$ observable
     const user = await firstValueFrom(this.auth.user$);
     const userId = user?.uid;
 
@@ -72,7 +86,7 @@ export class Chat {
     const messageData = {
       body: message,
       senderId: userId,
-      giphyId: '',
+      giphyId: this.attachedGiphyId,
       conversationId,
     };
 
@@ -80,7 +94,26 @@ export class Chat {
       .addMessageToConversation(conversationId, messageData)
       .then(() => {
         this.messageForm.reset();
+        this.attachedGiphyUrl = null;
+        this.attachedGiphyId = null;
       })
       .catch((error) => console.error('Error sending message:', error));
+  }
+
+  attachRandomGif() {
+    this.giphyService.getRandomGif().subscribe({
+      next: (response: any) => {
+        console.log('Random GIF Data:', response);
+        this.attachedGiphyUrl = response.data.images.fixed_height.url;
+        this.attachedGiphyId = response.data.id;
+      },
+      error(err) {
+        console.error(`Something went wrong fetching random gif.\nError: ${err}`);
+      },
+    });
+  }
+
+  deleteMessage(message: Message) {
+    this.firestoreService.deleteMessage(message);
   }
 }

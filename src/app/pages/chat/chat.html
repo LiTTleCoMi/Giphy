@@ -1,18 +1,35 @@
-@if (conversation$ | async; as conversation) {
-<h1>{{ conversation.title }}</h1>
-}
-<div class="chat-container">
-  @for (message of chatData$ | async; track message.id) {
-  <div class="message">
-    <strong>{{ message.senderName }}:</strong>
-    <p>{{ message.body }}</p>
-  </div>
-  } @empty {
-  <p>This conversation is empty. Send the first message!</p>
-  }
-</div>
+@if (vm$ | async; as vm) {
+  <h1>{{ vm.conversation.title }}</h1>
 
-<form [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
-  <input formControlName="body" placeholder="Enter a word..." autocomplete="off">
-  <button type="submit" [disabled]="!messageForm.valid">Send</button>
-</form>
+  <div class="chat-container">
+    @for (message of vm.chatData; track message.id) {
+      <div class="message" [class.my-message]="message.senderId === vm.currentUserId">
+        <strong>{{ message.senderName }}:</strong>
+        
+        <p>{{ message.body }}</p>
+
+        @if (message.giphyId) {
+          <app-giphy-display [giphyId]="message.giphyId"></app-giphy-display>
+        }
+        
+        @if (message.senderId === vm.currentUserId) {
+          <button class="delete-btn" type="button" (click)="deleteMessage(message)">Delete</button>
+        }
+      </div>
+    } @empty {
+      <p>This conversation is empty. Send the first message!</p>
+    }
+  </div>
+
+  <form class="message-form" [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
+    <input formControlName="body" placeholder="Message..." autocomplete="off" />
+    <button type="button" (click)="attachRandomGif()">Add Random Gif</button>
+    <button type="submit" [disabled]="!messageForm.valid">Send</button>
+
+    @if (attachedGiphyUrl) {
+      <div class="gif-preview">
+        <img [src]="attachedGiphyUrl" alt="Selected GIF" />
+      </div>
+    }
+  </form>
+}

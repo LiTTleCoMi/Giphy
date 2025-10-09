@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import {
-	addDoc,
+  addDoc,
   collection,
   collectionData,
+  deleteDoc,
   doc,
   docData,
   Firestore,
@@ -14,6 +15,8 @@ import {
 import { Observable } from 'rxjs';
 import { Conversation } from '../interfaces/chat.model';
 import { Message } from '../interfaces/message.model';
+import { UserProfile } from '../interfaces/user.model';
+import { ConversationModel } from '../interfaces/conversation.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +43,11 @@ export class FirestoreService {
     const q = query(usersRef, where('uid', 'in', userIds));
     return collectionData(q, { idField: 'id' });
   }
+  getAllUsers(): Observable<UserProfile[]> {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef);
+    return collectionData(q, { idField: 'uid' }) as Observable<UserProfile[]>;
+  }
 
   addMessageToConversation(conversationId: string, messageData: any) {
     const messagesRef = collection(this.firestore, 'conversations', conversationId, 'messages');
@@ -51,5 +59,22 @@ export class FirestoreService {
     };
 
     return addDoc(messagesRef, dataWithTimestamp);
+  }
+
+  deleteMessage(message: Message) {
+    console.log('Deleting message...');
+    const messageRef = doc(
+      this.firestore,
+      'conversations',
+      message.conversationId,
+      'messages',
+      message.id
+    );
+    return deleteDoc(messageRef);
+  }
+
+  createConversation(conversation: ConversationModel) {
+    const conversationsRef = collection(this.firestore, 'conversations');
+    return addDoc(conversationsRef, conversation);
   }
 }

@@ -1,0 +1,19 @@
+<h2>Start a New Conversation</h2>
+<p>Select users to chat with:</p>
+
+<form [formGroup]="newUserForm" (ngSubmit)="createConversation()">
+  <div>
+    <label for="title">Chat Title</label>
+    <input id="title" type="text" formControlName="title" placeholder="Enter a title..." />
+  </div>
+  <div class="user-list">
+    @for (user of users$ | async; track user.uid) {
+    <div class="user-item">
+      <input type="checkbox" [value]="user.uid" (change)="onUserSelectionChange($event)" />
+      <label>{{ user.displayName }}</label>
+    </div>
+    }
+  </div>
+
+  <button type="submit" [disabled]="!newUserForm.valid">Start Chat</button>
+</form>

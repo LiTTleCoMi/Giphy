@@ -12,14 +12,14 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './chats.scss',
 })
 export class Chats {
-  private auth = inject(AuthService);
+  private authService = inject(AuthService);
   private firestoreService = inject(FirestoreService);
   private router = inject(Router);
 
-  conversations$ = this.auth.user$.pipe(
+  conversations$ = this.authService.user$.pipe(
     switchMap((user) => {
       if (user) {
-				console.log(user);
+        console.log(user);
         return this.firestoreService.getConversationsForUser(user.uid);
       } else {
         return of([]);
@@ -29,10 +29,18 @@ export class Chats {
 
   async logout() {
     try {
-      await this.auth.logout();
+      await this.authService.logout();
       this.router.navigate(['/login']);
     } catch (error) {
       console.error(`Logout failed: ${error}`);
     }
-  }
+	}
+	
+	async deleteConversation(conversationId: string) {
+		try {
+			await this.firestoreService.deleteConversation(conversationId);
+		} catch (error) {
+			console.error('Conversation deletion failed:', error);
+		}
+	}
 }

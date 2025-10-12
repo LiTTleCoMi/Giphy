@@ -51,11 +51,11 @@ export class NewChat {
     if (!this.newUserForm.valid) return;
 
     const { title, participants: selectedUserIds } = this.newUserForm.value;
-		
+
     const currentUser = await firstValueFrom(this.authService.user$);
     const currentUserId = currentUser?.uid;
-		
-		if (!selectedUserIds || !currentUserId || !title) return;
+
+    if (!selectedUserIds || !currentUserId || !title) return;
 
     const participants = [...selectedUserIds, currentUserId];
 
@@ -65,7 +65,7 @@ export class NewChat {
         owner: currentUserId,
         participants,
       });
-      // After creating, navigate to the new chat page
+      
       this.router.navigate(['/chats', docRef.id]);
     } catch (error) {
       console.error('Error creating conversation:', error);

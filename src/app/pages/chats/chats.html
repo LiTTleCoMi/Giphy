@@ -1,14 +1,11 @@
 <a routerLink="/new-chat" class="new-chat-button">New Chat</a>
 <div>
-  <ul>
-    @for (conversation of conversations$ | async; track conversation.id) {
-    <li>
-      <a [routerLink]="['/chats', conversation.id]">{{ conversation.title }}</a>
-    </li>
-    } @empty {
-    <p>No conversations yet.</p>
-    }
-  </ul>
+  @for (conversation of conversations$ | async; track conversation.id) {
+  <a [routerLink]="['/chats', conversation.id]">{{ conversation.title }}</a>
+  <button type="button" (click)="deleteConversation(conversation.id)">Delete</button>
+  } @empty {
+  <p>No conversations yet.</p>
+  }
 </div>
 
 <div>

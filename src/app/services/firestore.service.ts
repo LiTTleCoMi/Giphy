@@ -7,10 +7,12 @@ import {
   doc,
   docData,
   Firestore,
+  getDocs,
   orderBy,
   query,
   serverTimestamp,
   where,
+	writeBatch,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Conversation } from '../interfaces/chat.model';
@@ -77,4 +79,15 @@ export class FirestoreService {
     const conversationsRef = collection(this.firestore, 'conversations');
     return addDoc(conversationsRef, conversation);
   }
+	async deleteConversation(conversationId: string): Promise<void> {
+		const conversationRef = doc(this.firestore, 'conversations', conversationId);
+		const messagesRef = collection(this.firestore, 'conversations', conversationId, 'messages');
+		const messagesSnapshot = await getDocs(messagesRef);
+		const batch = writeBatch(this.firestore);
+		messagesSnapshot.forEach(doc => {
+			batch.delete(doc.ref);
+		})
+		batch.delete(conversationRef);
+		return batch.commit();
+	}
 }

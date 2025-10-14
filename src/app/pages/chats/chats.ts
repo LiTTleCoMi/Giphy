@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { of, switchMap, tap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { FirestoreService } from '../../services/firestore.service';
 import { AsyncPipe } from '@angular/common';
 
@@ -34,13 +34,18 @@ export class Chats {
     } catch (error) {
       console.error(`Logout failed: ${error}`);
     }
-	}
-	
-	async deleteConversation(conversationId: string) {
-		try {
-			await this.firestoreService.deleteConversation(conversationId);
-		} catch (error) {
-			console.error('Conversation deletion failed:', error);
-		}
-	}
+  }
+
+  async deleteConversation(conversationId: string) {
+    try {
+      await this.firestoreService.deleteConversation(conversationId);
+    } catch (error) {
+      console.error('Conversation deletion failed:', error);
+    }
+  }
+  currentUserId$ = this.authService.user$.pipe(
+    map((user) => {
+      return user?.uid;
+    })
+  );
 }

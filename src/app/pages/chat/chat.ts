@@ -57,10 +57,21 @@ export class Chat {
       return user?.uid;
     })
   );
+  potentialParticipants$ = combineLatest([
+    this.firestoreService.getAllUsers(),
+    this.conversation$,
+  ]).pipe(
+    map(([allUsers, conversation]) => {
+      if (!conversation) return [];
+      return allUsers.filter((user) => !conversation.participants.includes(user.uid));
+    })
+  );
   vm$ = combineLatest({
     conversation: this.conversation$,
     chatData: this.chatData$,
     currentUserId: this.currentUserId$,
+    profiles: this.userProfiles$,
+    potentialParticipants: this.potentialParticipants$,
   });
 
   messageForm = new FormGroup({
@@ -115,5 +126,22 @@ export class Chat {
 
   deleteMessage(message: Message) {
     this.firestoreService.deleteMessage(message);
+  }
+
+  removeParticipant(userIdToRemove: string) {
+    const conversationId = this.route.snapshot.paramMap.get('id');
+    if (!conversationId) return;
+
+    this.firestoreService
+      .removeParticipantFromConversation(conversationId, userIdToRemove)
+      .catch((error) => console.error('Failed to remove participant:', error));
+  }
+  addParticipant(userIdToAdd: string) {
+    const conversationId = this.route.snapshot.paramMap.get('id');
+    if (!conversationId || !userIdToAdd) return;
+
+    this.firestoreService
+      .addParticipantToConversation(conversationId, userIdToAdd)
+      .catch((error) => console.error('Failed to add participant:', error));
   }
 }

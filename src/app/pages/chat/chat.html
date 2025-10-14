@@ -1,35 +1,68 @@
 @if (vm$ | async; as vm) {
-  <h1>{{ vm.conversation.title }}</h1>
+<h1>{{ vm.conversation.title }}</h1>
 
-  <div class="chat-container">
-    @for (message of vm.chatData; track message.id) {
-      <div class="message" [class.my-message]="message.senderId === vm.currentUserId">
-        <strong>{{ message.senderName }}:</strong>
-        
-        <p>{{ message.body }}</p>
+<div class="chat-container">
+  @for (message of vm.chatData; track message.id) {
+  <div class="message" [class.my-message]="message.senderId === vm.currentUserId">
+    <strong>{{ message.senderName }}</strong>
 
-        @if (message.giphyId) {
-          <app-giphy-display [giphyId]="message.giphyId"></app-giphy-display>
-        }
-        
-        @if (message.senderId === vm.currentUserId) {
-          <button class="delete-btn" type="button" (click)="deleteMessage(message)">Delete</button>
-        }
-      </div>
-    } @empty {
-      <p>This conversation is empty. Send the first message!</p>
+    <p>{{ message.body }}</p>
+
+    @if (message.giphyId) {
+    <app-giphy-display [giphyId]="message.giphyId"></app-giphy-display>
+    } @if (message.senderId === vm.currentUserId) {
+    <button class="delete-btn" type="button" (click)="deleteMessage(message)">Delete</button>
     }
   </div>
+  } @empty {
+  <p>This conversation is empty. Send the first message!</p>
+  }
+</div>
 
-  <form class="message-form" [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
-    <input formControlName="body" placeholder="Message..." autocomplete="off" />
-    <button type="button" (click)="attachRandomGif()">Add Random Gif</button>
-    <button type="submit" [disabled]="!messageForm.valid">Send</button>
+<form class="message-form" [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
+  <input formControlName="body" placeholder="Message..." autocomplete="off" />
+  <button type="button" (click)="attachRandomGif()">Add Random Gif</button>
+  <button type="submit" [disabled]="!messageForm.valid">Send</button>
 
-    @if (attachedGiphyUrl) {
-      <div class="gif-preview">
-        <img [src]="attachedGiphyUrl" alt="Selected GIF" />
-      </div>
+  @if (attachedGiphyUrl) {
+  <div class="gif-preview">
+    <img [src]="attachedGiphyUrl" alt="Selected GIF" />
+  </div>
+  }
+</form>
+
+
+
+<hr/>
+
+
+
+<div class="participants-container">
+  <h3>Participants</h3>
+  <ul>
+    @for(profile of vm.profiles; track profile['uid']) {
+    <li>
+      {{ profile['displayName'] }}
+
+      @if(vm.currentUserId === vm.conversation.owner && profile['uid'] !== vm.conversation.owner) {
+      <button (click)="removeParticipant(profile['uid'])">Remove</button>
+      }
+    </li>
     }
-  </form>
+  </ul>
+
+	@if(vm.currentUserId === vm.conversation.owner) {
+		<div class="add-participant">
+			<h4>Add a user:</h4>
+			<select #newUserSelect>
+				@for(user of vm.potentialParticipants; track user.uid) {
+					<option [value]="user.uid">{{ user.displayName }}</option>
+				}
+			</select>
+			<button (click)="addParticipant(newUserSelect.value)">Add</button>
+		</div>
+	}
+</div>
+
+
 }

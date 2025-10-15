@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { combineLatest, filter, map, switchMap, tap, firstValueFrom } from 'rxjs';
 import { FirestoreService } from '../../services/firestore.service';
 import { AsyncPipe } from '@angular/common';
@@ -11,7 +11,7 @@ import { Message } from '../../interfaces/message.model';
 
 @Component({
   selector: 'app-conversation',
-  imports: [AsyncPipe, ReactiveFormsModule, GiphyDisplay],
+  imports: [AsyncPipe, ReactiveFormsModule, GiphyDisplay, RouterModule],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
@@ -143,5 +143,5 @@ export class Chat {
     this.firestoreService
       .addParticipantToConversation(conversationId, userIdToAdd)
       .catch((error) => console.error('Failed to add participant:', error));
-  }
+	}
 }

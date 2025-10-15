@@ -106,4 +106,9 @@ export class FirestoreService {
       participants: arrayUnion(userIdToAdd),
     });
   }
+
+  leaveConversation(conversationId: string, userId: string) {
+    const conversationRef = doc(this.firestore, 'conversations', conversationId);
+    return updateDoc(conversationRef, { participants: arrayRemove(userId) });
+  }
 }

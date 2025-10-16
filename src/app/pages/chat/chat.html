@@ -29,16 +29,15 @@
         }
       </div>
 
+      @if (attachedGiphyUrl) {
+      <div class="gif-preview">
+        <img [src]="attachedGiphyUrl" alt="Selected GIF" />
+      </div>
+      }
       <form class="message-form" [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
         <input formControlName="body" placeholder="Message..." autocomplete="off" />
-        <button type="button" (click)="attachRandomGif()">Add Random Gif</button>
+        <button type="button" (click)="attachRandomGif()">GIF</button>
         <button type="submit" [disabled]="!messageForm.valid">Send</button>
-
-        @if (attachedGiphyUrl) {
-        <div class="gif-preview">
-          <img [src]="attachedGiphyUrl" alt="Selected GIF" />
-        </div>
-        }
       </form>
     </div>
 
@@ -46,17 +45,19 @@
 
     <div class="participants">
       <h3>Participants</h3>
-      <ul>
-        @for(profile of vm.profiles; track profile['uid']) {
-        <li>
-          {{ profile['displayName'] }}
-          @if(vm.currentUserId === vm.conversation.owner && profile['uid'] !==
-          vm.conversation.owner) {
-          <button class="remove-btn" (click)="removeParticipant(profile['uid'])">Remove</button>
+      <div class="participants-list">
+        <ul>
+          @for(profile of vm.profiles; track profile['uid']) {
+          <li>
+            {{ profile['displayName'] }}
+            @if(vm.currentUserId === vm.conversation.owner && profile['uid'] !==
+            vm.conversation.owner) {
+            <button class="remove" (click)="removeParticipant(profile['uid'])">Remove</button>
+            }
+          </li>
           }
-        </li>
-        }
-      </ul>
+        </ul>
+      </div>
 
       @if(vm.currentUserId === vm.conversation.owner) {
       <div class="add-participant">

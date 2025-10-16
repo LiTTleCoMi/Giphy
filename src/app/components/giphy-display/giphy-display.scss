@@ -1,5 +1,7 @@
 @use 'spacing' as spacing;
 
 .chat-gif {
-	border-radius: spacing.$sm;
+  border-radius: spacing.$sm;
+  max-width: 300px;
+  max-height: 350px;
 }

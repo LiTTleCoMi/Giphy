@@ -69,7 +69,7 @@ main {
 }
 
 
-.chat::-webkit-scrollbar {
+.chat::-webkit-scrollbar, .participants-list::-webkit-scrollbar {
   width: 0px;
   background: transparent; /* optional: hide track */
 }
@@ -108,6 +108,16 @@ main {
   }
 }
 
+.gif-preview {
+	margin-top: spacing.$sm;
+	border-radius: spacing.$sm;
+	img {
+		max-width: 250px;
+		max-height: 350px;
+		border-radius: spacing.$sm;
+	}
+}
+
 .message-form {
   display: flex;
   gap: spacing.$sm;
@@ -130,22 +140,21 @@ main {
   }
 
   button {
+		background-color: colors.$blue;
     padding: spacing.$sm spacing.$md;
     border-radius: spacing.$sm;
   }
-
-  .gif-preview {
-    margin-top: spacing.$sm;
-    img {
-      max-width: 150px;
-      border-radius: spacing.$sm;
-    }
-  }
+	button:disabled {
+		background-color: colors.$disabled-button;
+		cursor: not-allowed;
+	}
 }
 
 .participants {
-  width: fit-content;
+	width: 300px;
 	max-width: 300px;
+	min-height: 0;
+	overflow-y: auto;
   background-color: colors.$card-background;
   border-radius: spacing.$lg;
   padding: spacing.$lg;
@@ -167,13 +176,19 @@ main {
       justify-content: space-between;
       align-items: center;
 
-      .remove-btn {
+      .remove {
         background-color: colors.$red;
-        font-size: small;
         border-radius: spacing.$sm;
+				padding: 3px 6px;
       }
     }
   }
+
+	.participants-list {
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;		
+	}
 
   .add-participant {
     display: flex;

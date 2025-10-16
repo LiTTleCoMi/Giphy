@@ -50,12 +50,18 @@ main {
   box-shadow: 0 0 spacing.$md 2px colors.$shadow;
 }
 
+
 .conversation-list {
 	flex: 1;
   display: flex;
   flex-direction: column;
   gap: spacing.$lg;
 	overflow-y: auto;
+}
+
+.conversation-list::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* optional: hide track */
 }
 
 .conversation-item {

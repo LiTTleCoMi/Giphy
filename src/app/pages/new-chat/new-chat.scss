@@ -40,18 +40,23 @@ main {
   background-color: colors.$card-background;
   border-radius: spacing.$lg;
   max-width: 800px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
-  width: 100%;
+  min-height: 0; // allows child flex scrolling
   padding: spacing.$lg;
   box-sizing: border-box;
   box-shadow: 0 0 spacing.$md 2px colors.$shadow;
-  overflow-y: auto;
+
+  p {
+    margin: 0;
+		font-size: large;
+  }
 }
 
 .section-title {
-  margin: 0 0 spacing.$md 0;
+  margin: 0;
   font-size: text.$normal;
 }
 
@@ -59,6 +64,8 @@ main {
   display: flex;
   flex-direction: column;
   gap: spacing.$lg;
+  flex: 1;
+  min-height: 0;
 }
 
 .form-group {
@@ -66,19 +73,34 @@ main {
   flex-direction: column;
   gap: spacing.$sm;
 
+	label {
+		font-size: large;
+	}
+
   input {
-    padding: spacing.$sm;
+    padding: spacing.$md;
     border-radius: spacing.$sm;
-    border: 1px solid colors.$card-item-background;
+    border: none;
     background-color: colors.$card-item-background;
-    color: text.$normal;
+		font-size: medium;
   }
+	input:focus {
+		outline: 0;
+	}
 }
 
 .user-list {
   display: flex;
   flex-direction: column;
   gap: spacing.$md;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.user-list::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* optional: hide track */
 }
 
 .user-item {

@@ -1,0 +1,8 @@
+@use 'colors' as colors;
+@use 'spacing' as spacing;
+
+main {
+  background-color: colors.$main-background;
+  padding: spacing.$lg;
+  height: calc(100vh - spacing.$main-content-padding * 2);
+}

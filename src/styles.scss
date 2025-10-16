@@ -1,1 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'colors' as colors;
+@use 'spacing' as spacing;
+@use 'text' as text;
+
+* {
+  color: colors.$main-text;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  border: none;
+  border-radius: spacing.$sm;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.button-sm {
+  padding: spacing.$sm (spacing.$sm * spacing.$wide-button-padding-x-multi);
+  border-radius: spacing.$sm;
+  font-weight: text.$normal;
+  font-size: 0.9rem;
+}
+.button {
+  padding: spacing.$md (spacing.$md * spacing.$wide-button-padding-x-multi);
+  border-radius: spacing.$md;
+  font-weight: text.$bold;
+  font-size: 1.1rem;
+}
+.button-lg {
+  padding: spacing.$lg (spacing.$lg * spacing.$wide-button-padding-x-multi);
+  border-radius: spacing.$md;
+  font-weight: text.$bold;
+  font-size: 1.2rem;
+}
+.button-xl {
+  padding: spacing.$xl (spacing.$xl * spacing.$wide-button-padding-x-multi);
+  border-radius: spacing.$lg;
+  font-weight: text.$bold;
+  font-size: 1.4rem;
+}

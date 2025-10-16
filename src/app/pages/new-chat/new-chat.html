@@ -1,19 +1,48 @@
-<h2>Start a New Conversation</h2>
-<p>Select users to chat with:</p>
-
-<form [formGroup]="newUserForm" (ngSubmit)="createConversation()">
-  <div>
-    <label for="title">Chat Title</label>
-    <input id="title" type="text" formControlName="title" placeholder="Enter a title..." />
-  </div>
-  <div class="user-list">
-    @for (user of users$ | async; track user.uid) {
-    <div class="user-item">
-      <input type="checkbox" [value]="user.uid" (change)="onUserSelectionChange($event)" />
-      <label>{{ user.displayName }}</label>
-    </div>
-    }
-  </div>
-
-  <button type="submit" [disabled]="!newUserForm.valid">Start Chat</button>
-</form>
+@if (users$ | async; as users) {
+	<div class="page">
+	  <header>
+		<h1 class="title">New Chat</h1>
+		<button routerLink="/chats" class="button back-button">Back to Chats</button>
+	  </header>
+	
+	  <main>
+		<h2 class="section-title">Start a New Conversation</h2>
+		<p>Select users to chat with:</p>
+	
+		<form [formGroup]="newUserForm" (ngSubmit)="createConversation()" class="new-chat-form">
+		  <div class="form-group">
+			<label for="title">Chat Title</label>
+			<input
+			  id="title"
+			  type="text"
+			  formControlName="title"
+			  placeholder="Enter a title..."
+			/>
+		  </div>
+	
+		  <div class="user-list">
+			@for (user of users; track user.uid) {
+			<div class="user-item">
+			  <input
+				type="checkbox"
+				[value]="user.uid"
+				(change)="onUserSelectionChange($event)"
+				id="user-{{ user.uid }}"
+			  />
+			  <label for="user-{{ user.uid }}">{{ user.displayName }}</label>
+			</div>
+			}
+		  </div>
+	
+		  <button type="submit" [disabled]="!newUserForm.valid" class="button start-button">
+			Start Chat
+		  </button>
+		</form>
+	  </main>
+	
+	  <footer>
+		<button routerLink="/chats" class="button cancel-button">Cancel</button>
+	  </footer>
+	</div>
+	}
+	

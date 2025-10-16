@@ -1,0 +1,110 @@
+@use 'colors' as colors;
+@use 'spacing' as spacing;
+@use 'text' as text;
+
+:host {
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: spacing.$xl;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+header {
+  background-color: colors.$header-background;
+  padding: spacing.$xl;
+  border-radius: spacing.$lg;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+}
+
+.title {
+  margin: 0;
+  font-size: text.$title;
+}
+
+.back-button {
+  background-color: colors.$blue;
+}
+
+main {
+  background-color: colors.$card-background;
+  border-radius: spacing.$lg;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  padding: spacing.$lg;
+  box-sizing: border-box;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+  overflow-y: auto;
+}
+
+.section-title {
+  margin: 0 0 spacing.$md 0;
+  font-size: text.$normal;
+}
+
+.new-chat-form {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$lg;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$sm;
+
+  input {
+    padding: spacing.$sm;
+    border-radius: spacing.$sm;
+    border: 1px solid colors.$card-item-background;
+    background-color: colors.$card-item-background;
+    color: text.$normal;
+  }
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$md;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: spacing.$sm;
+
+  input[type='checkbox'] {
+    width: spacing.$lg;
+    height: spacing.$lg;
+  }
+}
+
+button.start-button {
+  background-color: colors.$blue;
+  align-self: flex-start;
+}
+
+footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  gap: spacing.$sm;
+}
+
+button.cancel-button {
+  background-color: colors.$red;
+}

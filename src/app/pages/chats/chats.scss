@@ -1,0 +1,98 @@
+@use 'colors' as colors;
+@use 'spacing' as spacing;
+@use 'text' as text;
+
+:host {
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: spacing.$xl;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+header {
+  background-color: colors.$header-background;
+  padding: spacing.$xl;
+  border-radius: spacing.$lg;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+}
+
+.title {
+  margin: 0;
+  font-size: text.$title;
+}
+
+.new-chat-button {
+  background-color: colors.$blue;
+}
+
+main {
+  background-color: colors.$card-background;
+  border-radius: spacing.$lg;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+	min-height: 0;
+  width: 100%;
+  padding: spacing.$lg;
+  box-sizing: border-box;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+}
+
+.conversation-list {
+	flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$lg;
+	overflow-y: auto;
+}
+
+.conversation-item {
+  background-color: colors.$card-item-background;
+  border-radius: spacing.$md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: spacing.$lg;
+
+  button {
+    font-size: small;
+    border-radius: spacing.$sm;
+    font-weight: text.$normal;
+  }
+}
+
+.conversation-title {
+  width: 100%;
+	height: 100%;
+  font-size: large;
+	display: flex;
+	align-items: center;
+}
+
+.delete,
+.leave {
+  background-color: colors.$red;
+}
+
+footer {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  box-sizing: border-box;
+}
+
+.logout-button {
+  background-color: colors.$red;
+}

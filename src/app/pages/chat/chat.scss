@@ -1,3 +1,162 @@
-.message:hover {
-  background-color: #ddd;
+@use 'colors' as colors;
+@use 'spacing' as spacing;
+@use 'text' as text;
+
+:host {
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: spacing.$xl;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+header {
+  background-color: colors.$header-background;
+  padding: spacing.$xl;
+  border-radius: spacing.$lg;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+}
+
+.title {
+  margin: 0;
+  font-size: text.$title;
+}
+
+.back-button {
+  background-color: colors.$blue;
+}
+
+main.chat-main {
+  background-color: colors.$card-background;
+  border-radius: spacing.$lg;
+  max-width: 800px;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: spacing.$lg;
+  box-sizing: border-box;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+  overflow-y: auto;
+  gap: spacing.$lg;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$md;
+}
+
+.message {
+  background-color: colors.$card-item-background;
+  padding: spacing.$md;
+  border-radius: spacing.$md;
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$sm;
+
+  &.my-message {
+    background-color: colors.$blue;
+    color: white;
+    align-self: flex-end;
+  }
+
+  .delete-btn {
+    background-color: colors.$red;
+    align-self: flex-end;
+    font-size: small;
+    border-radius: spacing.$sm;
+  }
+
+  app-giphy-display {
+    margin-top: spacing.$sm;
+  }
+}
+
+.message-form {
+  display: flex;
+  gap: spacing.$sm;
+  flex-wrap: wrap;
+
+  input {
+    flex: 1;
+    padding: spacing.$sm;
+    border-radius: spacing.$sm;
+    border: 1px solid colors.$card-item-background;
+    background-color: colors.$card-item-background;
+    color: text.$normal;
+  }
+
+  button {
+    padding: spacing.$sm spacing.$md;
+    border-radius: spacing.$sm;
+  }
+
+  .gif-preview {
+    margin-top: spacing.$sm;
+    img {
+      max-width: 150px;
+      border-radius: spacing.$sm;
+    }
+  }
+}
+
+footer.participants-footer {
+  width: 100%;
+  background-color: colors.$card-background;
+  border-radius: spacing.$lg;
+  padding: spacing.$lg;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$md;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: spacing.$sm;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .remove-btn {
+        background-color: colors.$red;
+        font-size: small;
+        border-radius: spacing.$sm;
+      }
+    }
+  }
+
+  .add-participant {
+    display: flex;
+    align-items: center;
+    gap: spacing.$sm;
+
+    select {
+      padding: spacing.$sm;
+      border-radius: spacing.$sm;
+      background-color: colors.$card-item-background;
+      color: text.$normal;
+    }
+
+    button {
+      background-color: colors.$blue;
+      padding: spacing.$sm spacing.$md;
+      border-radius: spacing.$sm;
+    }
+  }
 }

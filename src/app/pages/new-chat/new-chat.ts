@@ -4,11 +4,11 @@ import { FirestoreService } from '../../services/firestore.service';
 import { combineLatest, map, firstValueFrom } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { ReactiveFormsModule, FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-new-chat',
-  imports: [AsyncPipe, ReactiveFormsModule],
+  imports: [AsyncPipe, ReactiveFormsModule, RouterModule],
   templateUrl: './new-chat.html',
   styleUrl: './new-chat.scss',
 })

@@ -1,19 +1,42 @@
 @if (vm$ | async; as vm) {
-<a routerLink="/new-chat" class="new-chat-button">New Chat</a>
-<div>
-  @for (conversation of vm.conversations; track conversation.id) {
-  <a [routerLink]="['/chats', conversation.id]">{{ conversation.title }}</a>
-  @if (vm.currentUserId == conversation.owner) {
-  <button type="button" (click)="deleteConversation(conversation.id)">Delete</button>
-  } @else { 
-	<button type="button" (click)="leaveConversation(conversation.id, vm.currentUserId!)">Leave</button>
-  } } @empty {
-  <p>No conversations yet.</p>
-  }
-</div>
+<div class="page">
+  <header>
+    <h1 class="title">Chats</h1>
+    <button routerLink="/new-chat" class="button new-chat-button">New Chat</button>
+  </header>
 
-<div>
-  <button (click)="logout()">Logout</button>
-</div>
+  <main>
+    <div class="conversation-list">
+      @for (conversation of vm.conversations; track conversation.id) {
+      <div class="conversation-item">
+        <a [routerLink]="['/chats', conversation.id]" class="conversation-title">
+          <span>{{ conversation.title }}</span>
+        </a>
 
+        <div class="conversation-actions">
+          @if (vm.currentUserId == conversation.owner) {
+          <button type="button" class="button delete" (click)="deleteConversation(conversation.id)">
+            Delete
+          </button>
+          } @else {
+          <button
+            type="button"
+            class="button leave"
+            (click)="leaveConversation(conversation.id, vm.currentUserId!)"
+          >
+            Leave
+          </button>
+          }
+        </div>
+      </div>
+      } @empty {
+      <p class="empty-state">No conversations yet.</p>
+      }
+    </div>
+  </main>
+
+  <footer>
+    <button class="button logout-button" (click)="logout()">Logout</button>
+  </footer>
+</div>
 }

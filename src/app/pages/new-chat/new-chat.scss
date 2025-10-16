@@ -51,7 +51,7 @@ main {
 
   p {
     margin: 0;
-		font-size: large;
+    font-size: large;
   }
 }
 
@@ -73,20 +73,20 @@ main {
   flex-direction: column;
   gap: spacing.$sm;
 
-	label {
-		font-size: large;
-	}
+  label {
+    font-size: large;
+  }
 
   input {
     padding: spacing.$md;
     border-radius: spacing.$sm;
     border: none;
     background-color: colors.$card-item-background;
-		font-size: medium;
+    font-size: medium;
   }
-	input:focus {
-		outline: 0;
-	}
+  input:focus {
+    outline: 0;
+  }
 }
 
 .user-list {

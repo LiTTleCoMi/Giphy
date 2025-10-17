@@ -99,6 +99,11 @@ main {
       background-color: colors.$red;
       padding: 1px;
     }
+
+		span {
+			display: flex;
+			gap: spacing.$md;
+		}
   }
 
   p {
@@ -193,6 +198,7 @@ main {
 }
 
 .participants {
+	border: 2px solid colors.$card-secondary-item-background;
   min-width: 300px;
   width: 300px;
   max-width: 300px;

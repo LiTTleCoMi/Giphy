@@ -2,7 +2,7 @@ import { Component, HostListener, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { combineLatest, filter, map, switchMap, tap, firstValueFrom } from 'rxjs';
 import { FirestoreService } from '../../services/firestore.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { GiphyService } from '../../services/giphy.service';
@@ -11,7 +11,7 @@ import { Message } from '../../interfaces/message.model';
 
 @Component({
   selector: 'app-conversation',
-  imports: [AsyncPipe, ReactiveFormsModule, GiphyDisplay, RouterModule],
+  imports: [AsyncPipe, ReactiveFormsModule, GiphyDisplay, RouterModule, DatePipe],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
@@ -60,7 +60,8 @@ export class Chat {
       // Add senderName to each message
       return messages.map((message) => ({
         ...message,
-        senderName: profilesMap.get(message.senderId)?.['displayName'] || 'Unknown',
+				senderName: profilesMap.get(message.senderId)?.['displayName'] || 'Unknown',
+				timestamp: message.timestamp?.toDate(),
       }));
     })
   );

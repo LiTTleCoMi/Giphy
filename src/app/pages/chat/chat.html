@@ -11,7 +11,10 @@
         @for (message of vm.chatData; track message.id) {
         <div class="message" [class.my-message]="message.senderId === vm.currentUserId">
           <div class="message-header">
-            <strong>{{ message.senderName }}</strong>
+            <span>
+              <strong>{{ message.senderName }}</strong>
+              <span>{{ message.timestamp | date : 'MM/dd/yyyy h:mm a' }}</span>
+            </span>
             @if (message.senderId === vm.currentUserId) {
             <button class="delete" type="button" (click)="deleteMessage(message)">
               <span class="material-symbols-outlined"> delete </span>
@@ -44,8 +47,12 @@
     <!--  -->
     <section class="participants-section" [class.show-participants]="showParticipants">
       <div class="toggle-participants">
-        <button type="button" (click)="toggleParticipants()" aria-label="toggle the view participants bar">
-					<div></div>
+        <button
+          type="button"
+          (click)="toggleParticipants()"
+          aria-label="toggle the view participants bar"
+        >
+          <div></div>
         </button>
       </div>
 

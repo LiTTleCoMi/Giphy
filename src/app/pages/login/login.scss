@@ -1,0 +1,52 @@
+@use 'colors' as colors;
+@use 'spacing' as spacing;
+@use 'text' as text;
+
+:host {
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  box-sizing: border-box;
+  padding: spacing.$xl;
+  background-color: colors.$main-background;
+}
+
+.login-card {
+  background-color: colors.$card-background;
+  border-radius: spacing.$lg;
+  box-shadow: 0 0 spacing.$md 2px colors.$shadow;
+  padding: spacing.$xl;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: spacing.$lg;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: text.$title;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0;
+}
+
+.login-button {
+  background-color: colors.$blue;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: darken(colors.$blue, 10%);
+  }
+}

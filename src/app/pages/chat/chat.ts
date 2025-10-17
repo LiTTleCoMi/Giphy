@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { combineLatest, filter, map, switchMap, tap, firstValueFrom } from 'rxjs';
 import { FirestoreService } from '../../services/firestore.service';
@@ -23,6 +23,18 @@ export class Chat {
 
   attachedGiphyUrl: string | null = null;
   attachedGiphyId: string | null = null;
+  screenWidth = window.innerWidth;
+  showParticipants = this.screenWidth > 800;
+
+  toggleParticipants() {
+    this.showParticipants = !this.showParticipants;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: UIEvent) {
+    this.screenWidth = (event.target as Window).innerWidth;
+    if (this.screenWidth > 800) this.showParticipants = true;
+  }
 
   conversation$ = this.route.paramMap.pipe(
     map((params) => params.get('id')),
@@ -143,5 +155,5 @@ export class Chat {
     this.firestoreService
       .addParticipantToConversation(conversationId, userIdToAdd)
       .catch((error) => console.error('Failed to add participant:', error));
-	}
+  }
 }

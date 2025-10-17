@@ -42,35 +42,49 @@
     </div>
 
     <!--  -->
-
-    <div class="participants">
-      <h3>Participants</h3>
-      <div class="participants-list">
-        <ul>
-          @for(profile of vm.profiles; track profile['uid']) {
-          <li>
-            {{ profile['displayName'] }}
-            @if(vm.currentUserId === vm.conversation.owner && profile['uid'] !==
-            vm.conversation.owner) {
-            <button class="remove" (click)="removeParticipant(profile['uid'])">Remove</button>
-            }
-          </li>
-          }
-        </ul>
+    <section class="participants-section" [class.show-participants]="showParticipants">
+      <div class="toggle-participants">
+        <button type="button" (click)="toggleParticipants()" aria-label="toggle the view participants bar">
+					<div></div>
+        </button>
       </div>
 
-      @if(vm.currentUserId === vm.conversation.owner) {
-      <div class="add-participant">
+      @if (showParticipants) {
+      <div class="participants">
+        <h3>Participants</h3>
+
+        <div class="horizontal-seperation-bar"></div>
+
+        <div class="participants-list">
+          <ul>
+            @for(profile of vm.profiles; track profile['uid']) {
+            <li>
+              {{ profile['displayName'] }}
+              @if(vm.currentUserId === vm.conversation.owner && profile['uid'] !==
+              vm.conversation.owner) {
+              <button class="remove" (click)="removeParticipant(profile['uid'])">Remove</button>
+              }
+            </li>
+            }
+          </ul>
+        </div>
+
+        @if(vm.currentUserId === vm.conversation.owner) {
+        <div class="horizontal-seperation-bar"></div>
+
         <h4>Add a user:</h4>
-        <select #newUserSelect>
-          @for(user of vm.potentialParticipants; track user.uid) {
-          <option [value]="user.uid">{{ user.displayName }}</option>
-          }
-        </select>
-        <button (click)="addParticipant(newUserSelect.value)">Add</button>
+        <div class="add-participant">
+          <select #newUserSelect>
+            @for(user of vm.potentialParticipants; track user.uid) {
+            <option [value]="user.uid">{{ user.displayName }}</option>
+            }
+          </select>
+          <button (click)="addParticipant(newUserSelect.value)">Add</button>
+        </div>
+        }
       </div>
       }
-    </div>
+    </section>
   </main>
 </div>
 }

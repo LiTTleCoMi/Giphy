@@ -34,24 +34,32 @@ button:hover {
   border-radius: spacing.$sm;
   font-weight: text.$normal;
   font-size: 0.9rem;
+  height: fit-content;
+  width: fit-content;
 }
 .button {
   padding: spacing.$md (spacing.$md * spacing.$wide-button-padding-x-multi);
   border-radius: spacing.$md;
   font-weight: text.$bold;
   font-size: 1.1rem;
+  height: fit-content;
+  width: fit-content;
 }
 .button-lg {
   padding: spacing.$lg (spacing.$lg * spacing.$wide-button-padding-x-multi);
   border-radius: spacing.$md;
   font-weight: text.$bold;
   font-size: 1.2rem;
+  height: fit-content;
+  width: fit-content;
 }
 .button-xl {
   padding: spacing.$xl (spacing.$xl * spacing.$wide-button-padding-x-multi);
   border-radius: spacing.$lg;
   font-weight: text.$bold;
   font-size: 1.4rem;
+  height: fit-content;
+  width: fit-content;
 }
 
 // google font stuff

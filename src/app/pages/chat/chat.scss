@@ -58,8 +58,6 @@ main {
   width: 100%;
   gap: spacing.$xl;
   min-height: 0;
-	border-radius: spacing.$md;
-	overflow: hidden;
 }
 
 .chat {
@@ -69,6 +67,7 @@ main {
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+	border-radius: spacing.$md;
 }
 
 .chat::-webkit-scrollbar,

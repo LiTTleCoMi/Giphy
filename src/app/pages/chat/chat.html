@@ -7,7 +7,7 @@
 
   <main>
     <div class="chat-container">
-      <div class="chat">
+      <div class="chat" #chat (scroll)="onChatScroll()">
         @for (message of vm.chatData; track message.id) {
         <div class="message" [class.my-message]="message.senderId === vm.currentUserId">
           <div class="message-header">

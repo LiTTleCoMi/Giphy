@@ -1,4 +1,11 @@
-import { Component, HostListener, inject } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { combineLatest, filter, map, switchMap, tap, firstValueFrom } from 'rxjs';
 import { FirestoreService } from '../../services/firestore.service';
@@ -15,11 +22,15 @@ import { Message } from '../../interfaces/message.model';
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
-export class Chat {
+export class Chat implements AfterViewChecked {
   private firestoreService = inject(FirestoreService);
   private route = inject(ActivatedRoute);
-  private auth = inject(AuthService);
+  private authService = inject(AuthService);
   private giphyService = inject(GiphyService);
+  private hasScrolledInitially = false;
+  private userScrolledAway = false;
+
+  @ViewChild('chat') private chatContainer?: ElementRef<HTMLDivElement>;
 
   attachedGiphyUrl: string | null = null;
   attachedGiphyId: string | null = null;
@@ -36,6 +47,70 @@ export class Chat {
     if (this.screenWidth > 800) this.showParticipants = true;
   }
 
+  ngAfterViewChecked() {
+    if (this.hasScrolledInitially) return;
+
+    const el = this.chatContainer?.nativeElement;
+    if (el && el.scrollHeight > 0) {
+      // messages are rendered; jump to bottom once
+      this.scrollToBottom();
+      this.hasScrolledInitially = true;
+    }
+  }
+
+  private scheduleScrollIfReady(smooth = true) {
+    const attempt = () => {
+      const el = this.chatContainer?.nativeElement;
+      if (!el) {
+        requestAnimationFrame(attempt);
+        return;
+      }
+
+      // second rAF ensures new children are painted and scrollHeight updated
+      requestAnimationFrame(() => {
+        // don't yank the user's position if they scrolled away
+        if (this.userScrolledAway) return;
+
+        // if there's content, scroll
+        if (el.scrollHeight > 0) {
+          if (smooth) this.scrollToBottomSmooth();
+          else this.scrollToBottom();
+        }
+      });
+    };
+
+    requestAnimationFrame(attempt);
+  }
+
+  private scrollToBottom() {
+    const el = this.chatContainer?.nativeElement;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  private scrollToBottomSmooth() {
+    const el = this.chatContainer?.nativeElement;
+    if (!el) return;
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: 'smooth',
+    });
+  }
+
+  private isAtBottom(): boolean {
+    const el = this.chatContainer?.nativeElement;
+    if (!el) return false;
+    const threshold = 100; // pixels from bottom
+    return el.scrollHeight - el.scrollTop - el.clientHeight < threshold;
+  }
+
+  onChatScroll() {
+    const el = this.chatContainer?.nativeElement;
+    if (!el) return;
+    // set flag true when user is NOT within 100px of bottom
+    this.userScrolledAway = !(el.scrollHeight - el.scrollTop - el.clientHeight < 100);
+  }
+
   conversation$ = this.route.paramMap.pipe(
     map((params) => params.get('id')),
     filter((id): id is string => id !== null && id !== undefined),
@@ -50,22 +125,25 @@ export class Chat {
   messages$ = this.route.paramMap.pipe(
     map((params) => params.get('id')),
     filter((id): id is string => id !== null && id !== undefined),
-    switchMap((id) => this.firestoreService.getMessagesByConversationId(id))
+    switchMap((id) => this.firestoreService.getMessagesByConversationId(id)),
+    tap(() => {
+      this.scheduleScrollIfReady(true);
+    })
   );
   chatData$ = combineLatest([this.messages$, this.userProfiles$]).pipe(
     map(([messages, profiles]) => {
       // Create a lookup map for fast access to profiles
       const profilesMap = new Map(profiles.map((p) => [p['uid'], p]));
 
-      // Add senderName to each message
+      // Add senderName and modify timestamp
       return messages.map((message) => ({
         ...message,
-				senderName: profilesMap.get(message.senderId)?.['displayName'] || 'Unknown',
-				timestamp: message.timestamp?.toDate(),
+        senderName: profilesMap.get(message.senderId)?.['displayName'] || 'Unknown',
+        timestamp: message.timestamp?.toDate(),
       }));
     })
   );
-  currentUserId$ = this.auth.user$.pipe(
+  currentUserId$ = this.authService.user$.pipe(
     map((user) => {
       return user?.uid;
     })
@@ -99,7 +177,7 @@ export class Chat {
     const message = this.messageForm.value.body!;
 
     const conversationId = this.route.snapshot.paramMap.get('id');
-    const user = await firstValueFrom(this.auth.user$);
+    const user = await firstValueFrom(this.authService.user$);
     const userId = user?.uid;
 
     if (!conversationId || !userId) {
@@ -119,7 +197,9 @@ export class Chat {
       .then(() => {
         this.messageForm.reset();
         this.attachedGiphyUrl = null;
-        this.attachedGiphyId = null;
+				this.attachedGiphyId = null;
+				this.scheduleScrollIfReady(true);
+				console.log('scrolled');
       })
       .catch((error) => console.error('Error sending message:', error));
   }

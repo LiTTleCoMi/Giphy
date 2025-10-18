@@ -198,7 +198,8 @@ export class Chat implements AfterViewChecked {
         this.messageForm.reset();
         this.attachedGiphyUrl = null;
 				this.attachedGiphyId = null;
-				this.scrollToBottom();
+				this.userScrolledAway = false;
+				this.scheduleScrollIfReady(false);
       })
       .catch((error) => console.error('Error sending message:', error));
   }

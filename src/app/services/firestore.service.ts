@@ -67,7 +67,6 @@ export class FirestoreService {
   }
 
   deleteMessage(message: Message) {
-    console.log('Deleting message...');
     const messageRef = doc(
       this.firestore,
       'conversations',
